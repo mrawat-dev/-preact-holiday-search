@@ -15,18 +15,19 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { FilterBy } from "../../model/filter";
-import { getPriceRange, getStarRange } from "../../utils/filter";
+import { getPriceRange, getStarRange, getFacilities } from "../../utils/filter";
 
 export const FilterByComponent = ({
   setStarFilter,
   setPriceFilter,
   setFacilityFilter,
-  filerByDataList
+  filterDataModel
 }) => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   const [priceRange, setPriceRange] = useState<FilterBy[]>([]);
   const [starRange, setStarRange] = useState<FilterBy[]>([]);
+  const [facilityRange, setFacilityRange] = useState<FilterBy[]>([]);
 
   const defaultFilterValue = {
     status: false,
@@ -34,14 +35,19 @@ export const FilterByComponent = ({
   };
 
   useEffect(() => {
-    const starRange = getStarRange(filerByDataList);
+    const starRange = getStarRange(filterDataModel);
     setStarRange(starRange);
-  }, [filerByDataList]);
+  }, [filterDataModel]);
 
   useEffect(() => {
-    const priceRange = getPriceRange(filerByDataList);
+    const priceRange = getPriceRange(filterDataModel);
     setPriceRange(priceRange);
-  }, [filerByDataList]);
+  }, [filterDataModel]);
+
+  useEffect(() => {
+    const facilityRange = getFacilities(filterDataModel);
+    setFacilityRange(facilityRange);
+  }, [filterDataModel]);
 
   const handleChange = (panel: string) => (
     _event: React.SyntheticEvent,
@@ -73,6 +79,18 @@ export const FilterByComponent = ({
     }
     setStarFilter(defaultFilterValue);
   };
+
+  const handleFacilityCheckBoxChange = event => {
+    if (event.target.checked) {
+      const key = event.target.value;
+      const hotelIds = setFilterHoltelIds(key, facilityRange);
+      return setFacilityFilter({
+        status: true,
+        hotelIds
+      });
+    }
+    setFacilityFilter(defaultFilterValue);
+  }
 
   const setFilterHoltelIds = (key: number, range: FilterBy[]) => {
     const getItems = range.filter(p => p.key == key);
@@ -173,7 +191,24 @@ export const FilterByComponent = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography></Typography>
+          <FormGroup>
+            {facilityRange &&
+              facilityRange.map((range, index) => (
+                <Box sx={{ display: "inline-flex", m: 1 }}>
+                  <FormControlLabel
+                    key={`facility-${index}`}
+                    control={
+                      <Checkbox
+                        onChange={handleFacilityCheckBoxChange}
+                        value={range.key}
+                      />
+                    }
+                    label={range.valueText}
+                  />
+                  <em>({range.hotelIds.length})</em>
+                </Box>
+              ))}
+          </FormGroup>
         </AccordionDetails>
       </Accordion>
     </Box>

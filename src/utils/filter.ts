@@ -63,29 +63,54 @@ export const getPriceRange = (
   }
 };
 
-
 export const getStarRange = (
   dataSource: HotelFilterDataModel[]
 ): FilterBy[] => {
-  console.log("star sortedList", dataSource);
   if (dataSource && dataSource.length > 0) {
     const starList = new Set();
     dataSource.forEach(l => {
-      starList.add(l.starRating)
-    })
-    
-    let priceRange: FilterBy[] = [];
+      starList.add(l.starRating);
+    });
+
+    let range: FilterBy[] = [];
     let index = 1;
     starList.forEach((data: string) => {
-      priceRange.push({
+      range.push({
         key: index++,
         valueText: data,
         hotelIds: dataSource
           .filter(s => s.starRating == data)
           ?.map(h => h.hotelId)
-      })
-    })
-  
-    return priceRange;
+      });
+    });
+
+    return range;
+  }
+};
+
+export const getFacilities = (
+  dataSource: HotelFilterDataModel[]
+): FilterBy[] => {
+  if (dataSource && dataSource.length > 0) {
+    const facilities = new Set();
+    dataSource.forEach(l => {
+      l.hotelFacilities.forEach(f => {
+        facilities.add(f);
+      });
+    });
+
+    let range: FilterBy[] = [];
+    let index = 1;
+    facilities.forEach((data: string) => {
+      range.push({
+        key: index++,
+        valueText: data,
+        hotelIds: dataSource
+          .filter(s => s.hotelFacilities.includes(data))
+          ?.map(h => h.hotelId)
+      });
+    });
+
+    return range;
   }
 };

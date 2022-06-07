@@ -52,7 +52,7 @@ export const SearchResult = ({ holidays, filterDataModel }) => {
       <Grid item xs={4}>
         {filterDataModel && (
           <FilterByComponent
-            filerByDataList={filterDataModel}
+            filterDataModel={filterDataModel}
             setPriceFilter={setPriceFilter}
             setStarFilter={setStarFilter}
             setFacilityFilter={setFacilityFilter}
