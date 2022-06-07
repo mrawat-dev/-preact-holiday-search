@@ -5,7 +5,7 @@ import { useEffect, useState } from "preact/hooks";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@mui/material";
 
-import SearchComponent from "../components/search.component";
+import SearchComponent from "../components/search/search.component";
 import { ProgressBarComponent } from "../components/progress-bar/progress-bar.component";
 
 import { doRequest } from "../services/http.service";
