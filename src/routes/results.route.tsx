@@ -5,17 +5,23 @@ import { useEffect, useState } from "preact/hooks";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@mui/material";
 
+import { DateTime } from "luxon";
+
 import SearchComponent from "../components/search/search.component";
 import { ProgressBarComponent } from "../components/progress-bar/progress-bar.component";
+import { SearchResult } from "../components/search-result/search-result.component";
 
 import { doRequest } from "../services/http.service";
 import { BookingRequest, BookingResponse, Holiday } from "../types/booking";
-import { DateTime } from "luxon";
+import { HotelFilterDataModel } from "../model/filter";
 
 export default function ResultsRoute(): JSX.Element {
   const [searchParams] = useRouter();
 
   const [holidays, setHolidays] = useState<Holiday[]>([]);
+  const [filterDataModel, setFilterDataModel] = useState<
+    HotelFilterDataModel[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -50,8 +56,20 @@ export default function ResultsRoute(): JSX.Element {
         );
         if (response as BookingResponse) {
           const data = response as BookingResponse;
-          const holidayList = data.holidays;
+          const holidayList: Holiday[] = data.holidays;
+
+          let filterDataModel: HotelFilterDataModel[] = [];
+          holidayList.forEach(item => {
+            filterDataModel.push({
+              hotelId: item?.hotel?.id,
+              pricePerPerson: item?.pricePerPerson,
+              starRating: item?.hotel?.content?.starRating as number,
+              hotelFacilities: item?.hotel?.content?.hotelFacilities
+            });
+          });
+
           setHolidays(holidayList);
+          setFilterDataModel(filterDataModel);
         }
       } catch (error) {
         setHasError(true);
@@ -77,10 +95,12 @@ export default function ResultsRoute(): JSX.Element {
       ) : (
         <div>
           <SearchComponent />
-          {holidays &&
-            holidays.map((holiday: Holiday) => (
-              <span>{holiday.hotel.name}</span>
-            ))}
+          {(holidays && filterDataModel) && (
+            <SearchResult
+              holidays={holidays}
+              filterDataModel={filterDataModel}
+            />
+          )}
         </div>
       )}
     </section>

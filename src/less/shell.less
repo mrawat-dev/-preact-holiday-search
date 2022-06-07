@@ -6,10 +6,6 @@
     box-sizing: border-box;
 }
 
-:global(html) {
-    font-size: 62.5%;
-}
-
 :global(body) {
     font-family: @primary-font;
     font-weight: @font-weight-light;
@@ -17,7 +13,7 @@
     text-align: left;
     margin: 0;
     padding: 0;
-    font-size: 1.6rem;
+    font-size: 1rem;
     overflow-x: hidden;
     background-color: @background-grey;
 }
@@ -34,7 +30,6 @@
     margin-left: calc(50% - 50vw);
 }
 
-
 :global(label) {
     width: 100%;
     display: block;
@@ -42,6 +37,14 @@
 
 :global(h1) {
     font-size: 2.4rem;
+}
+
+:global(h2) {
+    font-size: 1.6rem;
+}
+
+:global(h3) {
+    font-size: 1.2rem;
 }
 
 :global(input), :global(select) {

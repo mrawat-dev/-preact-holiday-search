@@ -1,0 +1,32 @@
+@import (reference) "../../less/styled-components.include.less";
+
+.tripadvisor {
+  font-size: 1rem;
+  line-height: 1.2rem;
+}
+
+.rating {
+  display: block;
+  margin: 0 0 4px;
+  transform: scale(0.8);
+  text-align: center;
+  flex-direction: column;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  flex-wrap: wrap;
+
+  .rating-label {
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+}
+
+.price {
+  &:after {
+    content: "pp";
+    font-size: 1rem;
+    -webkit-font-smoothing: antialiased;
+  }
+}
