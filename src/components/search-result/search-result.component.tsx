@@ -12,7 +12,7 @@ import { FilterResult } from "../../model/filter";
 export const SearchResult = ({ holidays, filterDataModel }) => {
   const defaultFilter = {
     status: false,
-    hotelId: []
+    hotelIds: []
   };
 
   const [priceFilter, setPriceFilter] = useState<FilterResult>(defaultFilter);
@@ -28,19 +28,19 @@ export const SearchResult = ({ holidays, filterDataModel }) => {
 
     if (priceFilter.status) {
       filteredData = filteredData.filter((item: Holiday) =>
-        priceFilter.hotelId.includes(item.hotel.id)
+        priceFilter.hotelIds.includes(item.hotel.id)
       );
     }
 
     if (starFilter.status) {
       filteredData = filteredData.filter((item: Holiday) =>
-        priceFilter.hotelId.includes(item.hotel.id)
+        starFilter.hotelIds.includes(item.hotel.id)
       );
     }
 
     if (facilityFilter.status) {
       filteredData = filteredData.filter((item: Holiday) =>
-        facilityFilter.hotelId.includes(item.hotel.id)
+        facilityFilter.hotelIds.includes(item.hotel.id)
       );
     }
 

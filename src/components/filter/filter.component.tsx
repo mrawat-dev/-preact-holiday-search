@@ -9,12 +9,13 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
-  Typography
+  Typography,
+  Rating
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { FilterBy } from "../../model/filter";
-import { getPriceRange } from "../../utils/filter";
+import { getPriceRange, getStarRange } from "../../utils/filter";
 
 export const FilterByComponent = ({
   setStarFilter,
@@ -29,8 +30,13 @@ export const FilterByComponent = ({
 
   const defaultFilterValue = {
     status: false,
-    hotelId: []
+    hotelIds: []
   };
+
+  useEffect(() => {
+    const starRange = getStarRange(filerByDataList);
+    setStarRange(starRange);
+  }, [filerByDataList]);
 
   useEffect(() => {
     const priceRange = getPriceRange(filerByDataList);
@@ -47,19 +53,36 @@ export const FilterByComponent = ({
   const handlePriceCheckBoxChange = event => {
     if (event.target.checked) {
       const key = event.target.value;
-      const getItems = priceRange.filter(p => p.key == key);
-    
-      if (getItems && getItems.length > 0) {
-        const hoteIds = getItems.map(i => i.hotelId);
-        if (hoteIds && hoteIds.length > 0) {
-          return setPriceFilter({
-            status: true,
-            hotelId: hoteIds[0]
-          });
-        }
-      }
+      const hotelIds = setFilterHoltelIds(key, priceRange);
+      return setPriceFilter({
+        status: true,
+        hotelIds
+      });
     }
     setPriceFilter(defaultFilterValue);
+  };
+
+  const handleStarCheckBoxChange = event => {
+    if (event.target.checked) {
+      const key = event.target.value;
+      const hotelIds = setFilterHoltelIds(key, starRange);
+      return setStarFilter({
+        status: true,
+        hotelIds
+      });
+    }
+    setStarFilter(defaultFilterValue);
+  };
+
+  const setFilterHoltelIds = (key: number, range: FilterBy[]) => {
+    const getItems = range.filter(p => p.key == key);
+    if (getItems && getItems.length > 0) {
+      const hoteIds = getItems.map(i => i.hotelIds);
+      if (hoteIds && hoteIds.length > 0) {
+        return hoteIds[0];
+      }
+    }
+    return [];
   };
 
   return (
@@ -78,7 +101,29 @@ export const FilterByComponent = ({
         >
           <Typography sx={{ width: "33%", flexShrink: 0 }}>RATING</Typography>
         </AccordionSummary>
-        <AccordionDetails></AccordionDetails>
+        <AccordionDetails>
+          <FormGroup>
+            {starRange &&
+              starRange.map((range, index) => (
+                <Box sx={{ display: "inline-flex", m: 1 }}>
+                  <FormControlLabel
+                    key={`star-${index}`}
+                    control={
+                      <Box>
+                        <Checkbox
+                          onChange={handleStarCheckBoxChange}
+                          value={range.key}
+                          sx={{ mb: 2 }}
+                        />
+                        <Rating value={+range.valueText} readOnly />
+                      </Box>
+                    }
+                  />
+                  <em>({range.hotelIds.length})</em>
+                </Box>
+              ))}
+          </FormGroup>
+        </AccordionDetails>
       </Accordion>
       <Accordion
         expanded={expanded === "ppPanel"}
@@ -108,7 +153,7 @@ export const FilterByComponent = ({
                     }
                     label={range.valueText}
                   />
-                  <em>({range.hotelId.length})</em>
+                  <em>({range.hotelIds.length})</em>
                 </Box>
               ))}
           </FormGroup>

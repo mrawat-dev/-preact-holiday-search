@@ -1,17 +1,17 @@
 export interface HotelFilterDataModel {
   hotelId: string;
   pricePerPerson: number;
-  starRating: number;
+  starRating: string | number;
   hotelFacilities: string[];
 }
 
 export interface FilterBy {
   key: number;
   valueText: string;
-  hotelId: string[];
+  hotelIds: string[];
 };
 
 export interface FilterResult {
   status: boolean;
-  hotelId: string[];
+  hotelIds: string[];
 }

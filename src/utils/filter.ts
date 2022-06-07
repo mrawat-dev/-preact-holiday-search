@@ -30,7 +30,7 @@ export const getPriceRange = (
         priceRange.push({
           key: i,
           valueText: `up to £${pricePerPerson}`,
-          hotelId: sortedList
+          hotelIds: sortedList
             .filter(s => s.pricePerPerson < pricePerPerson)
             ?.map(h => h.hotelId)
         });
@@ -40,7 +40,7 @@ export const getPriceRange = (
         priceRange.push({
           key: i,
           valueText: `£${lowerBoundValue} to £${upperBoundValue}`,
-          hotelId: sortedList
+          hotelIds: sortedList
             .filter(
               s =>
                 s.pricePerPerson >= lowerBoundValue &&
@@ -53,12 +53,39 @@ export const getPriceRange = (
         priceRange.push({
           key: i,
           valueText: `over to £${lowerBoundValue}`,
-          hotelId: sortedList
+          hotelIds: sortedList
             .filter(s => s.pricePerPerson > lowerBoundValue)
             ?.map(h => h.hotelId)
         });
       }
     }
+    return priceRange;
+  }
+};
+
+
+export const getStarRange = (
+  dataSource: HotelFilterDataModel[]
+): FilterBy[] => {
+  console.log("star sortedList", dataSource);
+  if (dataSource && dataSource.length > 0) {
+    const starList = new Set();
+    dataSource.forEach(l => {
+      starList.add(l.starRating)
+    })
+    
+    let priceRange: FilterBy[] = [];
+    let index = 1;
+    starList.forEach((data: string) => {
+      priceRange.push({
+        key: index++,
+        valueText: data,
+        hotelIds: dataSource
+          .filter(s => s.starRating == data)
+          ?.map(h => h.hotelId)
+      })
+    })
+  
     return priceRange;
   }
 };
