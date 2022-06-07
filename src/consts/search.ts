@@ -1,4 +1,4 @@
-import { Option } from "../components/select.component"
+import { Option } from "../components/common/select.component"
 
 export const LOCATIONS: Option[] = [
     {

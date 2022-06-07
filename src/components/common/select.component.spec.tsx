@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { mount, configure } from 'enzyme';
-import { LOCATIONS } from '../consts/search'
+import { LOCATIONS } from '../../consts/search'
 import Adapter from 'enzyme-adapter-preact-pure';
 import { SelectComponent } from './select.component';
 
